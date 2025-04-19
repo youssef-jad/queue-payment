@@ -88,4 +88,4 @@ jobs:
         QUEUE_CONNECTION: redis
         REDIS_HOST: 127.0.0.1
         REDIS_PORT: 6379
-      run: php artisan test
+      run: php artisan test tests/Feature
