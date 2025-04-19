@@ -1,3 +1,5 @@
+[![Queue Tests](https://github.com/youssef-jad/queue-payment/actions/workflows/laravel.yml/badge.svg)](https://github.com/youssef-jad/queue-payment/actions/workflows/laravel.yml)
+
 # Laravel Queue Processing System
 
 A simple Laravel app that handles payment processing using queues and Redis. It's built to be reliable and easy to monitor.
