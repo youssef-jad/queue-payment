@@ -8,7 +8,7 @@ A simple Laravel app that handles payment processing using queues and Redis. It'
 - Redis for handling the queue
 - Jobs that retry automatically if they fail
 - Proper error handling and logging
-- A command to check if the queue is healthy
+- A command to check if the queue is healthy "half done"
 - An API endpoint to create orders
 
 ## Getting Started
@@ -30,12 +30,17 @@ A simple Laravel app that handles payment processing using queues and Redis. It'
 ./vendor/bin/sail artisan test
 ```
 
-4. Check your jobs in Horizon:
+4 - Run horizon queue 
+```bash
+./vendor/bin/sail artisan horizon
+```
+
+5. Check your jobs in Horizon:
 ```
 http://localhost/horizon/
 ```
 
-5. Test the queue with this curl command:
+5. Test the queue with this curl command to simulate the API call of create order:
 ```bash
 curl -X POST http://localhost/api/create-order \
   -H "Content-Type: application/json" \
