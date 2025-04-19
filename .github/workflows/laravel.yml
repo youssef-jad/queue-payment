@@ -16,6 +16,15 @@ jobs:
         ports:
           - 6379:6379
         options: --health-cmd="redis-cli ping" --health-interval=10s --health-timeout=5s --health-retries=5
+      
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_DATABASE: laravel
+          MYSQL_ROOT_PASSWORD: password
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5
 
     steps:
     - uses: actions/checkout@v4
@@ -24,14 +33,18 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: '8.4'
-        extensions: redis
+        extensions: redis, pdo_mysql
         coverage: xdebug
 
     - name: Copy .env
       run: |
         cp .env.example .env
-        sed -i 's/DB_CONNECTION=mysql/DB_CONNECTION=sqlite/' .env
-        sed -i 's/DB_DATABASE=laravel/DB_DATABASE=:memory:/' .env
+        sed -i 's/DB_CONNECTION=mysql/DB_CONNECTION=mysql/' .env
+        sed -i 's/DB_HOST=127.0.0.1/DB_HOST=127.0.0.1/' .env
+        sed -i 's/DB_PORT=3306/DB_PORT=3306/' .env
+        sed -i 's/DB_DATABASE=laravel/DB_DATABASE=laravel/' .env
+        sed -i 's/DB_USERNAME=root/DB_USERNAME=root/' .env
+        sed -i 's/DB_PASSWORD=/DB_PASSWORD=password/' .env
         sed -i 's/QUEUE_CONNECTION=sync/QUEUE_CONNECTION=redis/' .env
         sed -i 's/REDIS_HOST=127.0.0.1/REDIS_HOST=localhost/' .env
 
@@ -46,13 +59,16 @@ jobs:
 
     - name: Create Database
       run: |
-        touch database/database.sqlite
         php artisan migrate:fresh --env=testing --force
 
     - name: Execute tests
       env:
-        DB_CONNECTION: sqlite
-        DB_DATABASE: :memory:
+        DB_CONNECTION: mysql
+        DB_HOST: 127.0.0.1
+        DB_PORT: 3306
+        DB_DATABASE: testing
+        DB_USERNAME: root
+        DB_PASSWORD: password
         QUEUE_CONNECTION: redis
         REDIS_HOST: localhost
         REDIS_PORT: 6379
