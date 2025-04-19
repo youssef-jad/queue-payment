@@ -47,4 +47,11 @@ jobs:
     - name: Copy .env
       run: |
         cp .env.example .env
-        sed -
+        sed -i'' -e 's/^DB_CONNECTION=.*/DB_CONNECTION=mysql/' .env
+        sed -i'' -e 's/^DB_HOST=.*/DB_HOST=127.0.0.1/' .env
+        sed -i'' -e 's/^DB_PORT=.*/DB_PORT=3306/' .env
+        sed -i'' -e 's/^DB_DATABASE=.*/DB_DATABASE=laravel/' .env
+        sed -i'' -e 's/^DB_USERNAME=.*/DB_USERNAME=root/' .env
+        sed -i'' -e 's/^DB_PASSWORD=.*/DB_PASSWORD=password/' .env
+        sed -i'' -e 's/^QUEUE_CONNECTION=.*/QUEUE_CONNECTION=redis/' .env
+        sed -i'' -e 's/^REDIS_HOST=.*/REDIS_HOST=127.0.0.1/' .env
